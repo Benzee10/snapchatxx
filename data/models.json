@@ -1,4 +1,26 @@
 {
+  "South Africa": [
+    {
+      "id": 101,
+      "name": "Thando",
+      "age": 25,
+      "photo": "https://i.imgur.com/SouthAfricaGirl.jpg",
+      "bio": "Cape Town’s queen of vibes.",
+      "whatsapp": "+27821234567",
+      "price": 5
+    }
+  ],
+  "Ghana": [
+    {
+      "id": 102,
+      "name": "Akosua",
+      "age": 23,
+      "photo": "https://i.imgur.com/GhanaGirl.jpg",
+      "bio": "Accra-based beauty with brains.",
+      "whatsapp": "+233501234567",
+      "price": 6
+    }
+  ],
   "USA": [
     {
       "id": 1,
