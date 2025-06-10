@@ -1,46 +1,16 @@
-{
-  "South Africa": [
-    {
-      "id": 101,
-      "name": "Thando",
-      "age": 25,
-      "photo": "https://i.imgur.com/SouthAfricaGirl.jpg",
-      "bio": "Cape Town’s queen of vibes.",
-      "whatsapp": "+27821234567",
-      "price": 5
-    }
-  ],
-  "Ghana": [
-    {
-      "id": 102,
-      "name": "Akosua",
-      "age": 23,
-      "photo": "https://i.imgur.com/GhanaGirl.jpg",
-      "bio": "Accra-based beauty with brains.",
-      "whatsapp": "+233501234567",
-      "price": 6
-    }
-  ],
-  "USA": [
-    {
-      "id": 1,
-      "name": "Lisa",
-      "age": 24,
-      "photo": "https://i.imgur.com/1Xq9Dm7.jpg",
-      "bio": "Model and influencer from NYC.",
-      "whatsapp": "+1234567890",
-      "price": 5
-    }
-  ],
-  "Nigeria": [
-    {
-      "id": 3,
-      "name": "Amara",
-      "age": 22,
-      "photo": "https://i.imgur.com/tz2vvS1.jpg",
-      "bio": "Popular Lagos-based model.",
-      "whatsapp": "+2345678901",
-      "price": 6
-    }
-  ]
-}
+[
+  {
+    "name": "Lerato Mokoena",
+    "country": "South Africa",
+    "bio": "Fashion model & student.",
+    "image": "https://randomuser.me/api/portraits/women/65.jpg",
+    "whatsapp": "27712345678"
+  },
+  {
+    "name": "Ama Kwabena",
+    "country": "Ghana",
+    "bio": "Actress & beauty influencer.",
+    "image": "https://randomuser.me/api/portraits/women/32.jpg",
+    "whatsapp": "233201234567"
+  }
+]
