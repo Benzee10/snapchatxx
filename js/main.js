@@ -1,5 +1,7 @@
 let modelsData = {};
+let currentModels = [];
 const countrySelect = document.getElementById("countrySelect");
+const searchInput = document.getElementById("searchInput");
 const modelsContainer = document.getElementById("modelsContainer");
 
 // Load JSON
@@ -24,59 +26,60 @@ function clearModels() {
   modelsContainer.innerHTML = "";
 }
 
-function renderModels(country) {
+function renderModels(models) {
   clearModels();
-  if (!modelsData[country]) return;
+  currentModels = models;
 
-  modelsData[country].forEach(model => {
+  models.forEach(model => {
     const card = document.createElement("div");
     card.className = "model-card";
 
     card.innerHTML = `
       <img src="${model.photo}" class="model-photo" alt="${model.name}" />
-      <div class="model-info">
-        <div class="model-name">${model.name}, ${model.age}</div>
-        <div class="model-bio">${model.bio}</div>
-        <div class="model-price">Subscription: $${model.price}</div>
-      </div>
-      <button class="chat-btn enabled" id="pay-${model.id}">Pay & Chat</button>
+      <div class="model-name">${model.name}, ${model.age}</div>
+      <div class="model-bio">${model.bio}</div>
+      <div class="model-price">Subscription: $${model.price}</div>
+      <button class="chat-btn" id="pay-${model.id}">Pay & Chat</button>
     `;
 
-    const btn = card.querySelector(`#pay-${model.id}`);
-    btn.addEventListener("click", () => handlePayment(model));
+    card.querySelector("button").addEventListener("click", () => handlePayment(model));
     modelsContainer.appendChild(card);
   });
 }
 
 countrySelect.addEventListener("change", e => {
-  renderModels(e.target.value);
+  const country = e.target.value;
+  if (modelsData[country]) {
+    renderModels(modelsData[country]);
+  }
 });
 
-// Simulated payment + Telegram Payments (test flow)
+searchInput.addEventListener("input", e => {
+  const searchTerm = e.target.value.toLowerCase();
+  const filtered = currentModels.filter(model =>
+    model.name.toLowerCase().includes(searchTerm)
+  );
+  renderModels(filtered);
+});
+
 function handlePayment(model) {
   const tg = window.Telegram.WebApp;
-
   tg.MainButton.text = `Pay $${model.price} to chat with ${model.name}`;
   tg.MainButton.show();
 
   tg.MainButton.onClick(() => {
     tg.MainButton.setText("Processing...");
+    const fakeSuccess = true;
 
-    // Simulate payment - you would use your backend to generate a real invoice
-    const fakePaymentSuccess = true; // simulate it
-
-    if (fakePaymentSuccess) {
+    if (fakeSuccess) {
       tg.MainButton.hide();
       openWhatsAppChat(model.whatsapp, model.name);
-    } else {
-      alert("Payment failed.");
-      tg.MainButton.setText("Try Again");
     }
   });
 }
 
 function openWhatsAppChat(number, name) {
-  const encodedMsg = encodeURIComponent(`Hi ${name}, I'm ready to chat! 😍`);
-  const chatURL = `https://wa.me/${number.replace(/\D/g, "")}?text=${encodedMsg}`;
-  window.open(chatURL, "_blank");
+  const message = encodeURIComponent(`Hi ${name}, I’m ready to chat!`);
+  const waURL = `https://wa.me/${number.replace(/\D/g, "")}?text=${message}`;
+  window.open(waURL, "_blank");
 }
