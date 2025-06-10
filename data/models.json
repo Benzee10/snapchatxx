@@ -1,0 +1,24 @@
+{
+  "USA": [
+    {
+      "id": 1,
+      "name": "Lisa",
+      "age": 24,
+      "photo": "https://i.imgur.com/1Xq9Dm7.jpg",
+      "bio": "Model and influencer from NYC.",
+      "whatsapp": "+1234567890",
+      "price": 5
+    }
+  ],
+  "Nigeria": [
+    {
+      "id": 3,
+      "name": "Amara",
+      "age": 22,
+      "photo": "https://i.imgur.com/tz2vvS1.jpg",
+      "bio": "Popular Lagos-based model.",
+      "whatsapp": "+2345678901",
+      "price": 6
+    }
+  ]
+}
