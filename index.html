@@ -1,36 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Find Your Local Baddie</title>
-  <link rel="stylesheet" href="styles/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find Local Models</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="dark-toggle">
-  <label>
-    <input type="checkbox" id="darkModeToggle"> 🌙 Dark Mode
-  </label>
-</div>
+  <h1>🌍 Choose Your Country</h1>
+  <select id="countrySelect">
+    <option value="">-- Select Country --</option>
+    <option value="nigeria">Nigeria</option>
+    <option value="southafrica">South Africa</option>
+    <option value="usa">USA</option>
+  </select>
 
-<div class="spinner" id="loadingSpinner"></div>
+  <div class="subscription-status" id="subscriptionStatus"></div>
 
-  <div class="container">
-    <h1>Find Your Local Baddie</h1>
+  <div class="models" id="modelList"></div>
 
-    <div class="controls">
-      <select id="countrySelect">
-        <option value="all">All Countries</option>
-        <option value="South Africa">South Africa 🇿🇦</option>
-        <option value="Ghana">Ghana 🇬🇭</option>
-      </select>
-
-      <input type="text" id="searchInput" placeholder="Search by name...">
-    </div>
-
-    <div id="modelContainer" class="model-grid"></div>
-  </div>
-
-  <script src="scripts/app.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>
