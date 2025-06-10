@@ -55,6 +55,13 @@ countrySelect.addEventListener('change', async () => {
 
     modelList.appendChild(card);
   });
+let telegramUserId = null;
+
+window.addEventListener("DOMContentLoaded", () => {
+  if (Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe.user) {
+    telegramUserId = Telegram.WebApp.initDataUnsafe.user.id;
+  }
+});
 
   document.querySelectorAll('.chat-btn').forEach(btn => {
     btn.addEventListener('click', e => {
@@ -70,3 +77,12 @@ countrySelect.addEventListener('change', async () => {
 });
 
 updateSubscriptionStatus();
+
+const amount = 5;
+const merchantId = "62869";
+const currency = "USD";
+const orderId = telegramUserId; // use Telegram ID as order ID
+
+const payUrl = `https://pay.freekassa.ru/?m=${merchantId}&oa=${amount}&o=${orderId}&currency=${currency}`;
+window.location.href = payUrl;
+
