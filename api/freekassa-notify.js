@@ -1,3 +1,18 @@
+import admin from 'firebase-admin';
+import { readFileSync } from 'fs';
+
+const serviceAccount = JSON.parse(
+  readFileSync('./firebase-service-account.json', 'utf-8') // Replace path as needed
+);
+
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  });
+}
+
+const db = admin.firestore();
+
 export default async function handler(req, res) {
   const {
     AMOUNT,
@@ -11,7 +26,6 @@ export default async function handler(req, res) {
   const SECRET_WORD_2 = "kdc54qa{Nen5eb]";
   const MERCHANT_ID = "62869";
 
-  // Step 1: Reconstruct the signature to verify authenticity
   const crypto = await import('crypto');
   const hash = crypto.createHash('md5');
   const controlString = `${MERCHANT_ID}:${AMOUNT}:${SECRET_WORD_2}:${MERCHANT_ORDER_ID}`;
@@ -22,11 +36,15 @@ export default async function handler(req, res) {
     return res.status(403).send("Invalid signature");
   }
 
-  // Step 2: Log or process payment
-  // You can link the MERCHANT_ORDER_ID with a user ID or Telegram user
-  console.log(`✅ Payment received for order ${MERCHANT_ORDER_ID}. Amount: $${AMOUNT}`);
+  // Save paid user
+  await db.collection('paid_users').doc(MERCHANT_ORDER_ID).set({
+    user_id: MERCHANT_ORDER_ID,
+    amount: AMOUNT,
+    email: P_EMAIL,
+    phone: P_PHONE,
+    paid_at: admin.firestore.FieldValue.serverTimestamp()
+  });
 
-  // Optional: Update your subscription database here (like Firebase)
-
+  console.log(`✅ Stored payment for Telegram User ID: ${MERCHANT_ORDER_ID}`);
   return res.status(200).send("OK");
 }
