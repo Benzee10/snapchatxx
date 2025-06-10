@@ -1,16 +1,56 @@
-[
-  {
-    "name": "Lerato Mokoena",
-    "country": "South Africa",
-    "bio": "Fashion model & student.",
-    "image": "https://randomuser.me/api/portraits/women/65.jpg",
-    "whatsapp": "27712345678"
-  },
-  {
-    "name": "Ama Kwabena",
-    "country": "Ghana",
-    "bio": "Actress & beauty influencer.",
-    "image": "https://randomuser.me/api/portraits/women/32.jpg",
-    "whatsapp": "233201234567"
-  }
-]
+{
+  "nigeria": [
+    {
+      "name": "Queen B",
+      "age": 24,
+      "bio": "Thick and sweet, based in Lagos",
+      "image": "https://yourdomain.com/images/queenb.jpg",
+      "whatsapp": "2348123456789",
+      "price": 5
+    },
+    {
+      "name": "Nia",
+      "age": 22,
+      "bio": "Petite beauty, Abuja based",
+      "image": "https://yourdomain.com/images/nia.jpg",
+      "whatsapp": "2348034567890",
+      "price": 4
+    }
+  ],
+  "southafrica": [
+    {
+      "name": "Zoe",
+      "age": 25,
+      "bio": "Sultry and stylish from Johannesburg",
+      "image": "https://yourdomain.com/images/zoe.jpg",
+      "whatsapp": "27712345678",
+      "price": 6
+    },
+    {
+      "name": "Thandi",
+      "age": 23,
+      "bio": "Curvy goddess from Cape Town",
+      "image": "https://yourdomain.com/images/thandi.jpg",
+      "whatsapp": "27791234567",
+      "price": 5
+    }
+  ],
+  "usa": [
+    {
+      "name": "Lola",
+      "age": 27,
+      "bio": "Blonde bombshell from LA",
+      "image": "https://yourdomain.com/images/lola.jpg",
+      "whatsapp": "12025550123",
+      "price": 10
+    },
+    {
+      "name": "Tiana",
+      "age": 26,
+      "bio": "Sassy and seductive, Miami based",
+      "image": "https://yourdomain.com/images/tiana.jpg",
+      "whatsapp": "12026660111",
+      "price": 9
+    }
+  ]
+}
