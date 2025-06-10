@@ -2,21 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Find Local Models</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Find Your Local Baddie</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <h1>🌍 Choose Your Country</h1>
-  <select id="countrySelect">
-    <option value="">-- Select Country --</option>
-    <option value="nigeria">Nigeria</option>
-    <option value="southafrica">South Africa</option>
-    <option value="usa">USA</option>
-  </select>
-
-  <div class="models" id="modelList"></div>
-
-  <script src="script.js"></script>
+  <header>Find Your Local Baddie</header>
+  <main>
+    <label for="countrySelect">Choose your country:</label>
+    <select id="countrySelect">
+      <option value="" disabled selected>Select a country</option>
+    </select>
+    <div id="modelsContainer" class="models-grid"></div>
+  </main>
+  <script src="js/main.js"></script>
 </body>
 </html>
