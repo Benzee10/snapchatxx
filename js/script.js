@@ -1,88 +1,73 @@
-async function loadModels(country) {
-  try {
-    const res = await fetch('assets/models.json');
-    const data = await res.json();
-    return data[country] || [];
-  } catch (e) {
-    console.error("Failed to load model data", e);
-    return [];
+import { db } from '../firebase-config.js';
+
+let telegramUserId = null;
+
+window.Telegram.WebApp.ready();
+
+window.addEventListener('DOMContentLoaded', async () => {
+  const user = Telegram.WebApp.initDataUnsafe?.user;
+  telegramUserId = user?.id;
+
+  const status = document.getElementById('subscriptionStatus');
+  const res = await fetch(`/api/check-paid?userId=${telegramUserId}`);
+  const { paid } = await res.json();
+
+  if (paid) localStorage.setItem('premium', 'true');
+  else localStorage.setItem('premium', 'false');
+
+  updateSubscriptionStatus();
+});
+
+function hasSubscription() {
+  return localStorage.getItem('premium') === 'true';
+}
+
+function updateSubscriptionStatus() {
+  const status = document.getElementById('subscriptionStatus');
+  if (hasSubscription()) {
+    status.textContent = '✅ Premium Access Active';
+    status.style.color = '#22c55e';
+  } else {
+    status.textContent = '🚫 Premium Locked - subscribe to chat';
+    status.style.color = '#f87171';
   }
 }
 
-const countrySelect = document.getElementById('countrySelect');
-const modelList = document.getElementById('modelList');
-const subscriptionStatus = document.getElementById('subscriptionStatus');
+async function loadModels(country) {
+  const res = await fetch('assets/models.json');
+  const data = await res.json();
+  return data[country] || [];
+}
 
-const hasSubscription = () => localStorage.getItem('premium') === 'true';
-
-const promptSubscription = () => {
-  if (confirm("Unlock premium access to chat with models. Subscribe now for $10/month?")) {
-    // Simulate real payment or integrate Stripe/Telegram here
-    localStorage.setItem('premium', 'true');
-    alert("Subscription successful! Enjoy full access.");
-    updateSubscriptionStatus();
-  }
-};
-
-const updateSubscriptionStatus = () => {
-  if (hasSubscription()) {
-    subscriptionStatus.textContent = "✅ Premium Access Active";
-    subscriptionStatus.style.color = "#22c55e";
-  } else {
-    subscriptionStatus.textContent = "🚫 Premium Access Locked - Subscribe to unlock WhatsApp chats.";
-    subscriptionStatus.style.color = "#f87171";
-  }
-};
-
-countrySelect.addEventListener('change', async () => {
-  const selected = countrySelect.value;
+document.getElementById('countrySelect').addEventListener('change', async () => {
+  const models = await loadModels(countrySelect.value);
   modelList.innerHTML = '';
-  const models = await loadModels(selected);
-
-  models.forEach(model => {
+  models.forEach(m => {
     const card = document.createElement('div');
     card.className = 'model-card';
-
     card.innerHTML = `
       ${hasSubscription() ? '<div class="badge">Premium</div>' : ''}
-      <img src="${model.image}" alt="${model.name}" />
-      <h3>${model.name}, ${model.age}</h3>
-      <p>${model.bio}</p>
-      <a class="chat-btn" href="#" data-whatsapp="${model.whatsapp}" data-price="${model.price}">
-        💬 Chat on WhatsApp ($${model.price})
-      </a>
+      <img src="${m.image}" alt="${m.name}"/>
+      <h3>${m.name}, ${m.age}</h3>
+      <p>${m.bio}</p>
+      <button class="chat-btn" data-whatsapp="${m.whatsapp}" data-price="${m.price}">
+        💬 Chat ($${m.price})
+      </button>
     `;
-
     modelList.appendChild(card);
-  });
-let telegramUserId = null;
-
-window.addEventListener("DOMContentLoaded", () => {
-  if (Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe.user) {
-    telegramUserId = Telegram.WebApp.initDataUnsafe.user.id;
-  }
-});
-
-  document.querySelectorAll('.chat-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.preventDefault();
-      if (!hasSubscription()) {
-        promptSubscription();
+    
+    card.querySelector('.chat-btn').onclick = () => {
+      if (hasSubscription()) {
+        window.open(`https://wa.me/${m.whatsapp}`, '_blank');
       } else {
-        const phone = btn.getAttribute('data-whatsapp');
-        window.open(`https://wa.me/${phone}?text=Hi%20I%20want%20to%20chat%20with%20you`, '_blank');
+        return startPayment();
       }
-    });
+    };
   });
 });
 
-updateSubscriptionStatus();
-
-const amount = 5;
-const merchantId = "62869";
-const currency = "USD";
-const orderId = telegramUserId; // use Telegram ID as order ID
-
-const payUrl = `https://pay.freekassa.ru/?m=${merchantId}&oa=${amount}&o=${orderId}&currency=${currency}`;
-window.location.href = payUrl;
-
+function startPayment() {
+  const amount = 5; // Modify as needed or make dynamic
+  const payUrl = `https://pay.freekassa.ru/?m=62869&oa=${amount}&o=${telegramUserId}&currency=USD`;
+  window.location.href = payUrl;
+}
