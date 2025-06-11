@@ -1,47 +1,50 @@
-import { db } from '../firebase-config.js';
 
-let telegramUserId = null;
-
+// Wait for Telegram Mini App to initialize
 window.Telegram.WebApp.ready();
 
-window.addEventListener('DOMContentLoaded', async () => {
+let telegramUserId = null;
+document.addEventListener('DOMContentLoaded', async () => {
   const user = Telegram.WebApp.initDataUnsafe?.user;
   telegramUserId = user?.id;
 
-  const status = document.getElementById('subscriptionStatus');
-  const res = await fetch(`/api/check-paid?userId=${telegramUserId}`);
-  const { paid } = await res.json();
-
-  if (paid) localStorage.setItem('premium', 'true');
-  else localStorage.setItem('premium', 'false');
-
   updateSubscriptionStatus();
+  loadAllModels(); // populate list on load
 });
 
+// Check local storage for subscription
 function hasSubscription() {
   return localStorage.getItem('premium') === 'true';
 }
 
 function updateSubscriptionStatus() {
-  const status = document.getElementById('subscriptionStatus');
+  const el = document.getElementById('subscriptionStatus');
   if (hasSubscription()) {
-    status.textContent = '✅ Premium Access Active';
-    status.style.color = '#22c55e';
+    el.textContent = '✅ Premium Access Active';
+    el.style.color = '#22c55e';
   } else {
-    status.textContent = '🚫 Premium Locked - subscribe to chat';
-    status.style.color = '#f87171';
+    el.textContent = '🚫 Premium Locked — Subscribe to chat';
+    el.style.color = '#f87171';
   }
 }
 
-async function loadModels(country) {
-  const res = await fetch('assets/models.json');
-  const data = await res.json();
-  return data[country] || [];
-}
+// Load models data and render
+async function loadAllModels() {
+  const country = document.getElementById('countrySelect').value;
+  if (!country) return;
 
-document.getElementById('countrySelect').addEventListener('change', async () => {
-  const models = await loadModels(countrySelect.value);
-  modelList.innerHTML = '';
+  let models = [];
+  try {
+    const res = await fetch('/assets/models.json');
+    const data = await res.json();
+    models = data[country] || [];
+  } catch (e) {
+    console.error('Failed to load models:', e);
+    return;
+  }
+
+  const container = document.getElementById('modelList');
+  container.innerHTML = '';
+
   models.forEach(m => {
     const card = document.createElement('div');
     card.className = 'model-card';
@@ -50,24 +53,31 @@ document.getElementById('countrySelect').addEventListener('change', async () => 
       <img src="${m.image}" alt="${m.name}"/>
       <h3>${m.name}, ${m.age}</h3>
       <p>${m.bio}</p>
-      <button class="chat-btn" data-whatsapp="${m.whatsapp}" data-price="${m.price}">
-        💬 Chat ($${m.price})
-      </button>
+      <button class="chat-btn">💬 Chat ($${m.price})</button>
     `;
-    modelList.appendChild(card);
-    
-    card.querySelector('.chat-btn').onclick = () => {
+    container.appendChild(card);
+
+    card.querySelector('.chat-btn').addEventListener('click', () => {
       if (hasSubscription()) {
         window.open(`https://wa.me/${m.whatsapp}`, '_blank');
       } else {
-        return startPayment();
+        startPayment();
       }
-    };
+    });
   });
-});
+}
 
+// Setup the country select listener
+document.getElementById('countrySelect').addEventListener('change', loadAllModels);
+
+// Trigger FreeKassa payment redirect
 function startPayment() {
-  const amount = 5; // Modify as needed or make dynamic
+  if (!telegramUserId) {
+    alert('Unable to detect Telegram user. Please reopen the mini-app.');
+    return;
+  }
+
+  const amount = 5; // can be made dynamic per model
   const payUrl = `https://pay.freekassa.ru/?m=62869&oa=${amount}&o=${telegramUserId}&currency=USD`;
   window.location.href = payUrl;
 }
