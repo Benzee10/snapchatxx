@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; background-color: #f9f9f9; }
+        h1, h2 { text-align: center; }
+        form { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        input, button { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; }
+        button { background-color: #007bff; color: white; font-weight: bold; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        #profile-list div { display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #fff; border-bottom: 1px solid #eee; }
+        #profile-list button { width: auto; background-color: #dc3545; font-size: 12px; padding: 5px 10px; }
+    </style>
+</head>
+<body>
+    <h1>Admin Panel</h1>
+    
+    <div id="password-prompt">
+        <h2>Enter Admin Password</h2>
+        <form id="password-form">
+            <input type="password" id="admin-password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <div id="admin-content" style="display:none;">
+        <h2>Add New Profile</h2>
+        <form id="add-profile-form">
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="text" id="location" placeholder="Location (e.g., Lagos, NG)" required>
+            <input type="url" id="imageUrl" placeholder="Image URL (e.g., from imgbb.com)" required>
+            <input type="text" id="whatsapp" placeholder="WhatsApp Number (e.g., +234...)" required>
+            <button type="submit">Add Profile</button>
+        </form>
+
+        <h2>Manage Existing Profiles</h2>
+        <div id="profile-list"></div>
+    </div>
+
+    <script>
+        // --- VERY SIMPLE PASSWORD PROTECTION ---
+        // We will set this password in Vercel later.
+        const passwordForm = document.getElementById('password-form');
+        const adminContent = document.getElementById('admin-content');
+        const passwordPrompt = document.getElementById('password-prompt');
+        let ADMIN_PASSWORD = '';
+
+        // Fetch the password from the server
+        fetch('/api/profiles?action=get_password')
+            .then(res => res.json())
+            .then(data => {
+                ADMIN_PASSWORD = data.password;
+            });
+
+        passwordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const password = document.getElementById('admin-password').value;
+            if (password === ADMIN_PASSWORD) {
+                passwordPrompt.style.display = 'none';
+                adminContent.style.display = 'block';
+                loadProfiles();
+            } else {
+                alert('Incorrect password.');
+            }
+        });
+
+
+        // --- FORM AND PROFILE LIST LOGIC ---
+        const addForm = document.getElementById('add-profile-form');
+        const profileList = document.getElementById('profile-list');
+
+        addForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const profile = {
+                name: document.getElementById('name').value,
+                location: document.getElementById('location').value,
+                imageUrl: document.getElementById('imageUrl').value,
+                whatsapp: document.getElementById('whatsapp').value,
+            };
+
+            await fetch('/api/profiles', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(profile)
+            });
+            
+            addForm.reset();
+            loadProfiles();
+        });
+
+        async function loadProfiles() {
+            const response = await fetch('/api/profiles?admin=true'); // admin=true to get whatsapp numbers
+            const profiles = await response.json();
+            profileList.innerHTML = '';
+            profiles.forEach(p => {
+                const div = document.createElement('div');
+                div.innerHTML = `<span>${p.name} - ${p.location}</span> <button onclick="deleteProfile('${p.id}')">Delete</button>`;
+                profileList.appendChild(div);
+            });
+        }
+
+        async function deleteProfile(id) {
+            if (!confirm('Are you sure you want to delete this profile?')) return;
+            await fetch('/api/profiles', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: id })
+            });
+            loadProfiles();
+        }
+    </script>
+</body>
+</html>
