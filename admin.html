@@ -41,75 +41,112 @@
     </div>
 
     <script>
-        // --- VERY SIMPLE PASSWORD PROTECTION ---
-        // We will set this password in Vercel later.
         const passwordForm = document.getElementById('password-form');
         const adminContent = document.getElementById('admin-content');
         const passwordPrompt = document.getElementById('password-prompt');
-        let ADMIN_PASSWORD = '';
-
-        // Fetch the password from the server
-        fetch('/api/profiles?action=get_password')
-            .then(res => res.json())
-            .then(data => {
-                ADMIN_PASSWORD = data.password;
-            });
-
-        passwordForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const password = document.getElementById('admin-password').value;
-            if (password === ADMIN_PASSWORD) {
-                passwordPrompt.style.display = 'none';
-                adminContent.style.display = 'block';
-                loadProfiles();
-            } else {
-                alert('Incorrect password.');
-            }
-        });
-
-
-        // --- FORM AND PROFILE LIST LOGIC ---
         const addForm = document.getElementById('add-profile-form');
         const profileList = document.getElementById('profile-list');
 
+        let currentPassword = '';
+
+        // Handle login
+        passwordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const passwordInput = document.getElementById('admin-password').value;
+            
+            // Send the password to the backend to verify it and get profiles
+            const response = await fetch('/api/profiles', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'get_profiles',
+                    password: passwordInput,
+                }),
+            });
+
+            if (response.ok) {
+                // Password was correct!
+                currentPassword = passwordInput; // Store the correct password for future actions
+                passwordPrompt.style.display = 'none';
+                adminContent.style.display = 'block';
+                const profiles = await response.json();
+                renderProfiles(profiles);
+            } else {
+                alert('Incorrect password. Please try again.');
+            }
+        });
+
+        // Handle adding a new profile
         addForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const profile = {
+            const profileData = {
                 name: document.getElementById('name').value,
                 location: document.getElementById('location').value,
                 imageUrl: document.getElementById('imageUrl').value,
                 whatsapp: document.getElementById('whatsapp').value,
             };
 
-            await fetch('/api/profiles', {
+            const response = await fetch('/api/profiles', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(profile)
+                body: JSON.stringify({
+                    action: 'add_profile',
+                    password: currentPassword, // Use the stored correct password
+                    data: profileData,
+                })
             });
-            
-            addForm.reset();
-            loadProfiles();
-        });
 
+            if(response.ok) {
+                addForm.reset();
+                loadProfiles(); // Reload the profile list
+            } else {
+                alert('Session expired or error. Please refresh and log in again.');
+            }
+        });
+        
+        // Handle deleting a profile
+        async function deleteProfile(id) {
+            if (!confirm('Are you sure you want to delete this profile?')) return;
+            
+            const response = await fetch('/api/profiles', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'delete_profile',
+                    password: currentPassword, // Use the stored correct password
+                    data: { id: id },
+                })
+            });
+
+            if(response.ok) {
+                loadProfiles(); // Reload the profile list
+            } else {
+                alert('Session expired or error. Please refresh and log in again.');
+            }
+        }
+        
+        // Function to reload profiles after an action
         async function loadProfiles() {
-            const response = await fetch('/api/profiles?admin=true'); // admin=true to get whatsapp numbers
+            const response = await fetch('/api/profiles', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'get_profiles',
+                    password: currentPassword,
+                }),
+            });
             const profiles = await response.json();
+            renderProfiles(profiles);
+        }
+
+        // Function to render the profiles in the list
+        function renderProfiles(profiles) {
             profileList.innerHTML = '';
             profiles.forEach(p => {
                 const div = document.createElement('div');
                 div.innerHTML = `<span>${p.name} - ${p.location}</span> <button onclick="deleteProfile('${p.id}')">Delete</button>`;
                 profileList.appendChild(div);
             });
-        }
-
-        async function deleteProfile(id) {
-            if (!confirm('Are you sure you want to delete this profile?')) return;
-            await fetch('/api/profiles', {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: id })
-            });
-            loadProfiles();
         }
     </script>
 </body>
