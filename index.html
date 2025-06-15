@@ -1,30 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ConnectSphere</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#3B82F6', // Blue-500
-            secondary: '#10B981', // Emerald-500
-            accent: '#EC4899', // Pink-500
-            lightgray: '#F3F4F6', // Gray-100
-            mediumgray: '#6B7280', // Gray-500
-            darkgray: '#1F2937', // Gray-800
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My App</title>
+    <!-- This is the official script from Telegram to make the Mini App work -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            padding: 20px;
+            text-align: center;
         }
-      }
-    }
-  </script>
+        .container {
+            max-width: 390px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        p {
+            font-size: 16px;
+        }
+    </style>
 </head>
-<body class="bg-lightgray">
-  <div id="root"></div>
-  <script type="module" src="index.js"></script>
+<body>
+    <div class="container">
+        <h1>Welcome to the Club!</h1>
+        <p id="user-greeting">Loading your info...</p>
+    </div>
+
+    <script>
+        // Initialize the Telegram Mini App
+        window.Telegram.WebApp.ready();
+
+        // Get the user info and display it
+        const user = window.Telegram.WebApp.initDataUnsafe?.user;
+        const greetingElement = document.getElementById('user-greeting');
+
+        if (user) {
+            greetingElement.textContent = `Hello, ${user.first_name}! The gallery will appear here soon.`;
+        } else {
+            greetingElement.textContent = "Welcome! The gallery will appear here soon.";
+        }
+    </script>
 </body>
 </html>
