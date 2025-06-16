@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find Your Local Baddie</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Find Your Local Baddie</h1>
+    <div class="controls">
+      <select id="country">
+        <option value="">All Countries</option>
+        <option value="Nigeria">Nigeria</option>
+        <option value="South Africa">South Africa</option>
+        <option value="Ghana">Ghana</option>
+      </select>
+      <input type="text" id="search" placeholder="Search by name..." />
+    </div>
+    <div id="loader">Loading profiles...</div>
+    <div id="profile-gallery" class="gallery"></div>
+  </div>
+
+  <script>
+    let models = [];
+
+    async function loadModels() {
+      const res = await fetch("assets/models.json");
+      models = await res.json();
+      displayModels(models);
+    }
+
+    function displayModels(data) {
+      const gallery = document.getElementById("profile-gallery");
+      gallery.innerHTML = "";
+      if (data.length === 0) {
+        gallery.innerHTML = "<p>No profiles found.</p>";
+        return;
+      }
+      data.forEach((model) => {
+        const card = document.createElement("div");
+        card.className = "profile-card";
+        card.innerHTML = `
+          <img src="${model.imageUrl}" alt="${model.name}" />
+          <div class="card-info">
+            <h2>${model.name}</h2>
+            <p class="bio">${model.bio}</p>
+            <p class="country">${model.country}</p>
+            <button onclick="unlock('${model.whatsapp}')">Chat on WhatsApp</button>
+          </div>`;
+        gallery.appendChild(card);
+      });
+    }
+
+    function unlock(number) {
+      alert("This feature is locked. Subscribe to unlock: " + number);
+    }
+
+    document.getElementById("country").addEventListener("change", filterModels);
+    document.getElementById("search").addEventListener("input", filterModels);
+
+    function filterModels() {
+      const country = document.getElementById("country").value.toLowerCase();
+      const search = document.getElementById("search").value.toLowerCase();
+
+      const filtered = models.filter((m) => {
+        const nameMatch = m.name.toLowerCase().includes(search);
+        const countryMatch = country === "" || m.country.toLowerCase() === country;
+        return nameMatch && countryMatch;
+      });
+
+      displayModels(filtered);
+    }
+
+    window.onload = loadModels;
+  </script>
+</body>
+</html>

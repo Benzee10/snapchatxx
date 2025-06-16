@@ -1,0 +1,87 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background-color: #0e1a14;
+  color: #fff;
+}
+
+.container {
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  color: #32de84;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.controls select,
+.controls input {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.profile-card {
+  background-color: #1b2c23;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s;
+}
+
+.profile-card:hover {
+  transform: scale(1.03);
+}
+
+.profile-card img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.card-info {
+  padding: 15px;
+}
+
+.card-info h2 {
+  margin: 0 0 10px;
+  font-size: 1.2rem;
+}
+
+.card-info .bio {
+  font-size: 0.95rem;
+  margin-bottom: 5px;
+}
+
+.card-info .country {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.card-info button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: #32de84;
+  border: none;
+  border-radius: 8px;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+}

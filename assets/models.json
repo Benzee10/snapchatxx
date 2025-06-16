@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Angela",
+    "country": "Nigeria",
+    "bio": "Curvy, sweet and fun. Available for travel and dates.",
+    "imageUrl": "https://i.ibb.co/LRb7kC4/model1.jpg",
+    "whatsapp": "+2347012345678"
+  },
+  {
+    "name": "Thando",
+    "country": "South Africa",
+    "bio": "Cape Town hottie, lover of good wine and great company.",
+    "imageUrl": "https://i.ibb.co/3snZTH7/model2.jpg",
+    "whatsapp": "+27712345678"
+  },
+  {
+    "name": "Ama",
+    "country": "Ghana",
+    "bio": "Chocolate beauty with a charming smile. Let’s vibe!",
+    "imageUrl": "https://i.ibb.co/P9d0My4/model3.jpg",
+    "whatsapp": "+233501234567"
+  },
+  {
+    "name": "Zinhle",
+    "country": "South Africa",
+    "bio": "Luxury companion and good conversationalist.",
+    "imageUrl": "https://i.ibb.co/fx4rVnS/model4.jpg",
+    "whatsapp": "+27719876543"
+  },
+  {
+    "name": "Chidera",
+    "country": "Nigeria",
+    "bio": "Sweet ebony. Based in Lagos. I bring the fire.",
+    "imageUrl": "https://i.ibb.co/fvypVCm/model5.jpg",
+    "whatsapp": "+2348023456789"
+  }
+]
