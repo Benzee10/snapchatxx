@@ -1,0 +1,65 @@
+[
+  {
+    "name": "Angela",
+    "bio": "Sweet and spicy Lagos baddie.",
+    "country": "Nigeria",
+    "imageUrl": "https://i.imgur.com/9GkA6fl.jpg",
+    "whatsapp": "+2348012345678"
+  },
+  {
+    "name": "Zinzi",
+    "bio": "Johannesburg queen. Let’s vibe.",
+    "country": "South Africa",
+    "imageUrl": "https://i.imgur.com/4Xq6K72.jpg",
+    "whatsapp": "+27831234567"
+  },
+  {
+    "name": "Ama",
+    "bio": "Accra beauty, full of love.",
+    "country": "Ghana",
+    "imageUrl": "https://i.imgur.com/nOGmT1W.jpg",
+    "whatsapp": "+233201234567"
+  },
+  {
+    "name": "Chika",
+    "bio": "Soft spoken and fun, based in Abuja.",
+    "country": "Nigeria",
+    "imageUrl": "https://i.imgur.com/8sCQaYP.jpg",
+    "whatsapp": "+2348023456789"
+  },
+  {
+    "name": "Lerato",
+    "bio": "Classy, elegant, and discreet.",
+    "country": "South Africa",
+    "imageUrl": "https://i.imgur.com/Y3i94kN.jpg",
+    "whatsapp": "+27839876543"
+  },
+  {
+    "name": "Naomi",
+    "bio": "Accra babe with a big heart.",
+    "country": "Ghana",
+    "imageUrl": "https://i.imgur.com/rnYYWWZ.jpg",
+    "whatsapp": "+233541234321"
+  },
+  {
+    "name": "Titi",
+    "bio": "From Lagos, 100% real vibes.",
+    "country": "Nigeria",
+    "imageUrl": "https://i.imgur.com/W1cI1Lm.jpg",
+    "whatsapp": "+2348098765432"
+  },
+  {
+    "name": "Mbali",
+    "bio": "Durban based. Let's keep it classy.",
+    "country": "South Africa",
+    "imageUrl": "https://i.imgur.com/JJJN4ZP.jpg",
+    "whatsapp": "+27831112222"
+  },
+  {
+    "name": "Adwoa",
+    "bio": "Elite companion from Kumasi.",
+    "country": "Ghana",
+    "imageUrl": "https://i.imgur.com/oS5z6jh.jpg",
+    "whatsapp": "+233501112233"
+  }
+]

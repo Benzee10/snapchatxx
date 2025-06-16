@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscribe to Chat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Subscribe to Unlock Chat</h1>
+    <p>Access WhatsApp chat by subscribing. Select your plan below:</p>
+    <button id="pay-btn">Pay 5 USD</button>
+  </div>
+  <script>
+    document.getElementById('pay-btn').addEventListener('click', () => {
+      // TODO: replace this with real payment gateway integration
+      localStorage.setItem('subscribed', 'true');
+
+      // Redirect back to the original page
+      const params = new URLSearchParams(window.location.search);
+      const returnUrl = params.get('return') || 'index.html';
+      window.location.href = returnUrl;
+    });
+  </script>
+</body>
+</html>
