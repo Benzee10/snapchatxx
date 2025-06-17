@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Approve</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="admin.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Admin Panel: Approve Subscription</h1>
+
+    <div id="password-protect">
+      <input type="password" id="admin-pass" placeholder="Enter Admin Password" />
+      <button onclick="checkPassword()">Enter</button>
+      <p id="pass-status" style="color: red;"></p>
+    </div>
+
+    <div id="admin-panel" style="display: none;">
+      <input type="text" id="user-id" placeholder="Enter User Email or UID" />
+      <input type="date" id="expire-date" />
+      <button onclick="approveUser()">Approve</button>
+      <p id="status-msg"></p>
+    </div>
+  </div>
+</body>
+</html>
