@@ -54,8 +54,21 @@
     }
 
     function unlock(number) {
-      alert("This feature is locked. Subscribe to unlock: " + number);
-    }
+  const subscribed = localStorage.getItem('subscribed') === 'true';
+  if (subscribed) {
+    window.open(`https://wa.me/${number.replace('+', '')}`, "_blank");
+  } else {
+    alert("This profile is locked. Subscribe to unlock full contact.");
+  }
+}
+
+    function checkSubscriptionExpiry() {
+  const expiry = localStorage.getItem('sub_expiry');
+  if (expiry && Date.now() > parseInt(expiry)) {
+    localStorage.setItem('subscribed', 'false');
+  }
+}
+checkSubscriptionExpiry();
 
     document.getElementById("country").addEventListener("change", filterModels);
     document.getElementById("search").addEventListener("input", filterModels);
