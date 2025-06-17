@@ -18,10 +18,19 @@
     </div>
 
     <div id="admin-panel" style="display: none;">
-      <input type="text" id="user-id" placeholder="Enter User Email or UID" />
+      <label>Select a user:</label>
+      <select id="user-select">
+        <option value="">-- Select User --</option>
+      </select>
+
       <input type="date" id="expire-date" />
       <button onclick="approveUser()">Approve</button>
+
       <p id="status-msg"></p>
+      <div id="whatsapp-container" style="display: none;">
+        <p>📲 WhatsApp:</p>
+        <a href="#" target="_blank" id="whatsapp-link">Send message</a>
+      </div>
     </div>
   </div>
 </body>
