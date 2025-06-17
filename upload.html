@@ -3,12 +3,19 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Upload Escort Profile</title>
+  <title>Admin: Upload Profile</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Admin: Add New Escort</h1>
+  <div id="lock-screen" class="container">
+    <h2>Admin Login</h2>
+    <input type="password" id="admin-password" placeholder="Enter admin password" />
+    <button onclick="checkPassword()">Enter</button>
+    <p id="login-status"></p>
+  </div>
+
+  <div id="upload-section" class="container" style="display: none;">
+    <h1>Upload New Escort Profile</h1>
     <form id="upload-form">
       <input type="text" placeholder="Name" id="name" required /><br />
       <input type="text" placeholder="Country" id="country" required /><br />
@@ -23,12 +30,24 @@
   <script type="module">
     import { supabase } from './supabase-config.js';
 
+    const PASSWORD = "F7b4ebee";
+
+    window.checkPassword = function () {
+      const input = document.getElementById("admin-password").value;
+      const status = document.getElementById("login-status");
+      if (input === PASSWORD) {
+        document.getElementById("lock-screen").style.display = "none";
+        document.getElementById("upload-section").style.display = "block";
+      } else {
+        status.textContent = "❌ Incorrect password.";
+      }
+    };
+
     const form = document.getElementById("upload-form");
     const status = document.getElementById("status");
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-
       const payload = {
         name: document.getElementById("name").value.trim(),
         country: document.getElementById("country").value.trim(),
@@ -36,7 +55,6 @@
         image_url: document.getElementById("image_url").value.trim(),
         whatsapp: document.getElementById("whatsapp").value.trim(),
       };
-
       const { error } = await supabase.from("models").insert([payload]);
       if (error) {
         status.textContent = "❌ Upload failed.";
