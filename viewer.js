@@ -1,61 +1,58 @@
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
 const supabase = createClient(
-  "https://vcgexvujgvfwbaktnwry.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjZ2V4dnVqZ3Zmd2Jha3Rud3J5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAxNjUzNDgsImV4cCI6MjA2NTc0MTM0OH0.6DvFHYliTSOloejLDWysgpjvS0f5YAm61q1Zq-OMU8k"
+  'https://vcgexvujgvfwbaktnwry.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjZ2V4dnVqZ3Zmd2Jha3Rud3J5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAxNjUzNDgsImV4cCI6MjA2NTc0MTM0OH0.6DvFHYliTSOloejLDWysgpjvS0f5YAm61q1Zq-OMU8k'
 );
 
 let models = [];
 
-async function checkAuthAndLoad() {
+async function checkAndLoad() {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) {
-    alert("Please log in first.");
-    window.location.href = "auth.html";
+    window.location.href = 'auth.html';
     return;
   }
 
-  const user = session.user;
   const { data: userData, error } = await supabase
-    .from("users")
-    .select("subscribed, subscription_expires")
-    .eq("id", user.id)
+    .from('users')
+    .select('subscribed, subscription_expires')
+    .eq('id', session.user.id)
     .single();
 
   if (error || !userData) {
-    alert("User not found in database. Contact admin.");
+    alert('User data not found.');
     return;
   }
 
-  // Auto-expire if time is up
   const now = new Date();
-  const expires = new Date(userData.subscription_expires);
-  if (expires < now) {
+  const exp = new Date(userData.subscription_expires);
+  if (exp <= now) {
     await supabase
-      .from("users")
+      .from('users')
       .update({ subscribed: false })
-      .eq("id", user.id);
-    userData.subscribed = false;
+      .eq('id', session.user.id);
+    return showLocked();
   }
 
   if (!userData.subscribed) {
-    document.getElementById("locked").style.display = "block";
-    document.getElementById("loader").style.display = "none";
-    return;
+    return showLocked();
   }
 
-  document.getElementById("filters").style.display = "flex";
+  document.getElementById('filters').style.display = 'flex';
   loadModels();
 }
 
+function showLocked() {
+  document.getElementById('locked').style.display = 'block';
+  document.getElementById('loader').style.display = 'none';
+}
+
 async function loadModels() {
-  const { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("subscribed", true);
+  const { data, error } = await supabase.from('models').select('*');
 
   if (error) {
-    console.error("Failed to load profiles", error);
+    console.error('Load error', error);
     return;
   }
 
@@ -64,18 +61,18 @@ async function loadModels() {
 }
 
 function displayModels(data) {
-  const gallery = document.getElementById("profile-gallery");
-  gallery.innerHTML = "";
-  document.getElementById("loader").style.display = "none";
+  const gallery = document.getElementById('profile-gallery');
+  gallery.innerHTML = '';
+  document.getElementById('loader').style.display = 'none';
 
   if (data.length === 0) {
-    gallery.innerHTML = "<p>No profiles found.</p>";
+    gallery.innerHTML = '<p>No profiles found.</p>';
     return;
   }
 
   data.forEach((model) => {
-    const card = document.createElement("div");
-    card.className = "profile-card";
+    const card = document.createElement('div');
+    card.className = 'profile-card';
     card.innerHTML = `
       <img src="${model.image_url}" alt="${model.name}" />
       <div class="card-info">
@@ -91,19 +88,21 @@ function displayModels(data) {
 }
 
 function filterModels() {
-  const country = document.getElementById("country").value.toLowerCase();
-  const search = document.getElementById("search").value.toLowerCase();
+  const country = document.getElementById('country').value.toLowerCase();
+  const search = document.getElementById('search').value.toLowerCase();
 
   const filtered = models.filter((m) => {
     const nameMatch = m.name.toLowerCase().includes(search);
-    const countryMatch = country === "" || m.country.toLowerCase() === country;
+    const countryMatch = !country || m.country.toLowerCase() === country;
     return nameMatch && countryMatch;
   });
 
   displayModels(filtered);
 }
 
-document.getElementById("country").addEventListener("change", filterModels);
-document.getElementById("search").addEventListener("input", filterModels);
+// Event listeners
+document.getElementById('country').addEventListener('change', filterModels);
+document.getElementById('search').addEventListener('input', filterModels);
 
-checkAuthAndLoad();
+// Run auth + model loading
+checkAndLoad();
