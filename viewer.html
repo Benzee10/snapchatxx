@@ -1,46 +1,34 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-const supabase = createClient('https://vcgexvujgvfwbaktnwry.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjZ2V4dnVqZ3Zmd2Jha3Rud3J5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAxNjUzNDgsImV4cCI6MjA2NTc0MTM0OH0.6DvFHYliTSOloejLDWysgpjvS0f5YAm61q1Zq-OMU8k');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Escort Gallery</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="viewer.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Find Your Local Baddie</h1>
 
-let models = [];
+    <div id="locked" style="display: none; text-align: center;">
+      <p style="font-size: 1.2rem;">This content is locked.</p>
+      <p style="color: #ccc;">To view profiles, please contact admin for subscription approval.</p>
+      <a href="https://wa.me/2347012345678" style="color: #32de84; font-weight: bold;">Chat Admin on WhatsApp</a>
+    </div>
 
-async function checkAndLoad() {
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) return window.location.href = 'auth.html';
+    <div class="controls" id="filters" style="display: none;">
+      <select id="country">
+        <option value="">All Countries</option>
+        <option value="Nigeria">Nigeria</option>
+        <option value="South Africa">South Africa</option>
+        <option value="Ghana">Ghana</option>
+      </select>
+      <input type="text" id="search" placeholder="Search by name..." />
+    </div>
 
-  const { data: u, error } = await supabase
-    .from('users')
-    .select('subscribed, subscription_expires')
-    .eq('id', session.user.id)
-    .single();
-
-  if (error || !u) return alert('User data not found.');
-
-  const now = new Date(), exp = new Date(u.subscription_expires);
-  if (exp <= now) {
-    await supabase.from('users').update({ subscribed: false }).eq('id', session.user.id);
-    return showLocked();
-  }
-
-  if (!u.subscribed) return showLocked();
-
-  document.getElementById('filters').style.display = 'flex';
-  loadModels();
-}
-
-function showLocked() {
-  document.getElementById('locked').style.display = 'block';
-  document.getElementById('loader').style.display = 'none';
-}
-
-async function loadModels() {
-  const { data, error } = await supabase
-    .from('models')
-    .select('*');
-
-  if (error) return console.error('Load error', error);
-
-  models = data;
-  displayModels(models);
-}
-
-checkAndLoad();
+    <div id="loader">Loading profiles...</div>
+    <div id="profile-gallery" class="gallery"></div>
+  </div>
+</body>
+</html>
