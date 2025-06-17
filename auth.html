@@ -1,31 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Login / Register</title>
   <script type="module" src="auth.js"></script>
   <style>
     body {
-      font-family: sans-serif;
-      background-color: #111;
+      background: #111;
       color: white;
+      font-family: sans-serif;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      padding-top: 50px;
+      height: 100vh;
     }
     .box {
-      width: 300px;
       background: #222;
       padding: 20px;
       border-radius: 12px;
-      box-shadow: 0 0 10px #000;
+      width: 300px;
     }
     input, button {
       width: 100%;
-      margin: 8px 0;
       padding: 10px;
+      margin: 8px 0;
       border: none;
       border-radius: 6px;
     }
@@ -35,21 +33,21 @@
       font-weight: bold;
     }
     .toggle {
-      background: transparent;
-      color: #32de84;
+      background: none;
       border: none;
-      margin-top: 10px;
+      color: #32de84;
       cursor: pointer;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
   <div class="box">
-    <h2 id="form-title">Login</h2>
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Password" />
+    <h2 id="title">Login</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
     <button id="submit">Login</button>
-    <button class="toggle" id="toggle-mode">Don’t have an account? Register</button>
+    <button class="toggle" id="toggle">Don’t have an account? Register</button>
   </div>
 </body>
 </html>
