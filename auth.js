@@ -44,5 +44,5 @@ submit.addEventListener('click', async () => {
     return;
   }
 
-  window.location.href = 'viewer.html';
+  window.location.href = 'index.html';
 });
