@@ -1,0 +1,51 @@
+<!-- upload.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Upload Escort Profile</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Admin: Add New Escort</h1>
+    <form id="upload-form">
+      <input type="text" placeholder="Name" id="name" required /><br />
+      <input type="text" placeholder="Country" id="country" required /><br />
+      <input type="text" placeholder="Bio" id="bio" required /><br />
+      <input type="text" placeholder="Image URL" id="image_url" required /><br />
+      <input type="text" placeholder="WhatsApp Number" id="whatsapp" required /><br />
+      <button type="submit">Upload</button>
+    </form>
+    <p id="status"></p>
+  </div>
+
+  <script type="module">
+    import { supabase } from './supabase-config.js';
+
+    const form = document.getElementById("upload-form");
+    const status = document.getElementById("status");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const payload = {
+        name: document.getElementById("name").value.trim(),
+        country: document.getElementById("country").value.trim(),
+        bio: document.getElementById("bio").value.trim(),
+        image_url: document.getElementById("image_url").value.trim(),
+        whatsapp: document.getElementById("whatsapp").value.trim(),
+      };
+
+      const { error } = await supabase.from("models").insert([payload]);
+      if (error) {
+        status.textContent = "❌ Upload failed.";
+        console.error(error);
+      } else {
+        status.textContent = "✅ Profile uploaded successfully!";
+        form.reset();
+      }
+    });
+  </script>
+</body>
+</html>
