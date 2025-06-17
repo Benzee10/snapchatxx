@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Escort Gallery</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="viewer.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Find Your Local Baddie</h1>
+
+    <div id="locked" style="display: none; text-align: center;">
+      <p style="font-size: 1.2rem;">This content is locked.</p>
+      <p style="color: #ccc;">To view profiles, please contact admin for subscription approval.</p>
+      <a href="https://wa.me/2347012345678" style="color: #32de84; font-weight: bold;">Chat Admin on WhatsApp</a>
+    </div>
+
+    <div class="controls" id="filters" style="display: none;">
+      <select id="country">
+        <option value="">All Countries</option>
+        <option value="Nigeria">Nigeria</option>
+        <option value="South Africa">South Africa</option>
+        <option value="Ghana">Ghana</option>
+      </select>
+      <input type="text" id="search" placeholder="Search by name..." />
+    </div>
+
+    <div id="loader">Loading profiles...</div>
+    <div id="profile-gallery" class="gallery"></div>
+  </div>
+</body>
+</html>
