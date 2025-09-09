@@ -1,10 +1,10 @@
-# WhatsApp Group Invitation Website
+# Snapchat Group Invitation Website
 
 ## Overview
-This is a static HTML website that displays a WhatsApp group invitation page. The website features:
+This is a static HTML website that displays a Snapchat group invitation page. The website features:
 - Responsive design with mobile-first approach
 - Dynamic content loading (profile images, group names, member counts)
-- WhatsApp-themed styling with animations
+- Snapchat-themed styling with yellow/orange color scheme and animations
 - Integration with external services for redirects
 
 ## Recent Changes
@@ -12,6 +12,10 @@ This is a static HTML website that displays a WhatsApp group invitation page. Th
   - Created Node.js HTTP server for static file serving
   - Configured workflow for port 5000 with proper caching headers
   - Set up deployment configuration for autoscale
+- **2025-09-09**: Complete redesign from WhatsApp to Snapchat styling
+  - Updated color scheme to yellow/orange theme
+  - Changed branding and typography to match Snapchat
+  - Preserved all original functionality while updating visual design
 
 ## Project Architecture
 - **Frontend**: Single HTML file (`index.html`) with embedded CSS and JavaScript
